@@ -216,3 +216,28 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# =========================
+# Entornos virtuales
+# =========================
+venv/
+env/
+
+# =========================
+# Archivos compilados y temporales de Python
+# =========================
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# =========================
+# Archivos específicos de SparkData / SARA
+# =========================
+
+# Ignorar datos crudos y exportaciones (¡Protección de datos de alumnos!)
+data/
+*.csv
+*.xlsx
+
+# Ignorar credenciales de la base de datos MySQL y contraseñas
+.env
