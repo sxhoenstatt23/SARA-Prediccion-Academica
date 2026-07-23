@@ -1,24 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SARA - Dashboard Docente</title>
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --bg-primary: #FFF5F7;       /* Fondo rosa claro */
-            --bg-secondary: #FFFFFF;     /* Blanco para tarjetas */
-            --pink-dark: #A24857;        /* Rosa viejo para textos principales */
-            --pink-medium: #D96B80;      /* Rosa intermedio para botones y activos */
-            --pink-light: #FAD1D8;       /* Rosa pastel suave para bordes y hover */
-            --pink-accent: #E85D75;      /* Rosa vibrante para acciones */
-            --text-main: #4A3E41;        /* Gris oscuro cálido */
-            --text-muted: #8F7E81;       /* Gris suave para subtítulos */
-            --danger: #E63946;           /* Alerta riesgo alto */
-            --warning: #F4A261;          /* Advertencia */
+            --bg-primary: #FFF5F7;
+            /* Fondo rosa claro */
+            --bg-secondary: #FFFFFF;
+            /* Blanco para tarjetas */
+            --pink-dark: #A24857;
+            /* Rosa viejo para textos principales */
+            --pink-medium: #D96B80;
+            /* Rosa intermedio para botones y activos */
+            --pink-light: #FAD1D8;
+            /* Rosa pastel suave para bordes y hover */
+            --pink-accent: #E85D75;
+            /* Rosa vibrante para acciones */
+            --text-main: #4A3E41;
+            /* Gris oscuro cálido */
+            --text-muted: #8F7E81;
+            /* Gris suave para subtítulos */
+            --danger: #E63946;
+            /* Alerta riesgo alto */
+            --warning: #F4A261;
+            /* Advertencia */
         }
 
         * {
@@ -34,7 +45,8 @@
         }
 
         .dashboard-container {
-            display: block; /* Cambiado para asegurar compatibilidad en renderizado simple */
+            display: block;
+            /* Cambiado para asegurar compatibilidad en renderizado simple */
             min-height: 100vh;
         }
 
@@ -51,6 +63,7 @@
                 width: 100%;
                 table-layout: fixed;
             }
+
             .sidebar {
                 display: table-cell;
                 width: 260px;
@@ -59,6 +72,7 @@
                 border-bottom: none;
                 height: 100vh;
             }
+
             .main-content {
                 display: table-cell;
                 vertical-align: top;
@@ -225,7 +239,9 @@
         .metric-card.risk {
             border-left: 5px solid var(--danger);
         }
-        .metric-card.risk .metric-value, .metric-card.risk i {
+
+        .metric-card.risk .metric-value,
+        .metric-card.risk i {
             color: var(--danger);
         }
 
@@ -414,10 +430,11 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="dashboard-container">
-        
+
         <aside class="sidebar">
             <div class="logo-area">
                 <i class="fa-solid fa-graduation-cap"></i>
@@ -439,7 +456,7 @@
         </aside>
 
         <main class="main-content">
-            
+
             <header class="top-header">
                 <div class="search-bar">
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -491,44 +508,113 @@
                         <div class="student-stats">
                             <div class="stat-box">
                                 <span class="stat-label">Promedio Actual</span>
-                                <span class="stat-val highlight-danger">7.2</span>
+                                <input type="number" id="in-promedio" step="0.1" value="7.2"
+                                    style="width: 100%; border: none; text-align: center; background: transparent; font-size: 18px; font-weight: 700; color: var(--pink-dark); outline: none;">
                             </div>
                             <div class="stat-box">
-                                <span class="stat-label">Asistencia</span>
-                                <span class="stat-val text-warning">75%</span>
+                                <span class="stat-label">Asistencia (%)</span>
+                                <input type="number" id="in-asistencia" value="75"
+                                    style="width: 100%; border: none; text-align: center; background: transparent; font-size: 18px; font-weight: 700; color: var(--warning); outline: none;">
                             </div>
                             <div class="stat-box">
                                 <span class="stat-label">Tareas Faltantes</span>
-                                <span class="stat-val highlight-danger">4</span>
+                                <input type="number" id="in-tareas" value="4"
+                                    style="width: 100%; border: none; text-align: center; background: transparent; font-size: 18px; font-weight: 700; color: var(--danger); outline: none;">
                             </div>
                         </div>
-                    </div>
-
-                    <div class="action-card">
-                        <h3><i class="fa-solid fa-kit-medical"></i> Protocolo de Intervención</h3>
-                        
-                        <div class="suggestion-box">
-                            <strong>Sugerencia del Sistema SARA:</strong>
-                            <p>Se recomienda agendar tutoría inmediata en Matemáticas y enviar reporte preventivo a coordinación.</p>
+                        <button type="button" id="btn-evaluar-sara" class="btn-save-action"
+                            style="margin-top: 20px; background-color: var(--pink-dark);">
+                            <i class="fa-solid fa-brain"></i> Evaluar Riesgo con SARA
+                        </button>
+                        <div class="stat-box">
+                            <span class="stat-label">Asistencia</span>
+                            <span class="stat-val text-warning">75%</span>
                         </div>
-
-                        <form class="action-form">
-                            <label for="comments">Registrar Notas y Observaciones:</label>
-                            <textarea id="comments" rows="3" placeholder="Ej. El alumno menciona problemas de conectividad..."></textarea>
-                            
-                            <div class="form-checkbox">
-                                <input type="checkbox" id="applied">
-                                <label for="applied">¿Se aplicó la intervención recomendada?</label>
-                            </div>
-
-                            <button type="button" class="btn-save-action">Guardar Seguimiento</button>
-                        </form>
+                        <div class="stat-box">
+                            <span class="stat-label">Tareas Faltantes</span>
+                            <span class="stat-val highlight-danger">4</span>
+                        </div>
                     </div>
                 </div>
-            </section>
 
-        </main>
+                <div class="action-card">
+                    <h3><i class="fa-solid fa-kit-medical"></i> Protocolo de Intervención</h3>
+
+                    <div class="suggestion-box">
+                        <strong>Sugerencia del Sistema SARA:</strong>
+                        <p>Se recomienda agendar tutoría inmediata en Matemáticas y enviar reporte preventivo a
+                            coordinación.</p>
+                    </div>
+
+                    <form class="action-form">
+                        <label for="comments">Registrar Notas y Observaciones:</label>
+                        <textarea id="comments" rows="3"
+                            placeholder="Ej. El alumno menciona problemas de conectividad..."></textarea>
+
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="applied">
+                            <label for="applied">¿Se aplicó la intervención recomendada?</label>
+                        </div>
+
+                        <button type="button" class="btn-save-action">Guardar Seguimiento</button>
+                    </form>
+                </div>
     </div>
+    </section>
 
+    </main>
+    </div>
+    <!-- SCRIPT DE CONEXIÓN CON FLASK Y MACHINE LEARNING -->
+    <script>
+        document.getElementById('btn-evaluar-sara').addEventListener('click', function () {
+            // 1. Extraemos los números de la pantalla
+            const promedio = document.getElementById('in-promedio').value;
+            const asistencia = document.getElementById('in-asistencia').value;
+            const tareas = document.getElementById('in-tareas').value;
+
+            // 2. Empaquetamos los datos
+            const formData = new FormData();
+            formData.append('promedio', promedio);
+            formData.append('asistencia', asistencia);
+            formData.append('tareas', tareas);
+
+            // Cambiamos el texto del botón mientras la IA "piensa"
+            const btn = document.getElementById('btn-evaluar-sara');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Analizando...';
+
+            // 3. Enviamos los datos a la ruta /evaluar de SARA.py
+            fetch('/evaluar', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // 4. Recibimos la respuesta y actualizamos la interfaz
+                    const badge = document.querySelector('.badge');
+
+                    if (data.riesgo === 'Riesgo Alto') {
+                        // Pintar de rojo
+                        badge.className = 'badge badge-danger';
+                        badge.textContent = 'Riesgo Alto';
+                        badge.style.backgroundColor = '#FCE8E6';
+                        badge.style.color = '#E63946';
+                    } else {
+                        // Pintar de verde
+                        badge.className = 'badge';
+                        badge.textContent = 'Normal';
+                        badge.style.backgroundColor = '#E6F4EA';
+                        badge.style.color = '#1E8E3E';
+                    }
+
+                    // Restaurar el botón
+                    btn.innerHTML = '<i class="fa-solid fa-brain"></i> Evaluar Riesgo con SARA';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    btn.innerHTML = 'Error de conexión';
+                });
+        });
+    </script>
 </body>
+
 </html>
