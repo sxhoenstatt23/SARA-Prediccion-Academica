@@ -25,28 +25,33 @@ app = Flask(__name__)
 def inicio():
     return render_template("SARA.html")
 
-# RUTA: El puente entre el HTML y la Inteligencia Artificial
 @app.route("/evaluar", methods=["POST"])
 def evaluar_alumno():
-    # 1. Recibimos los datos que nos enviará el HTML
+    # 1. Recibimos los datos de la interfaz
     promedio = float(request.form.get('promedio', 0))
     asistencia = float(request.form.get('asistencia', 0))
-    tareas_faltantes = int(request.form.get('tareas', 0))
+    tareas_faltantes = float(request.form.get('tareas', 0))
     
-    # 2. Le pasamos los datos al modelo para que haga la predicción
+    total_tareas = 15
+    
+    entregadas_reales = total_tareas - tareas_faltantes
+    
+    porcentaje_entregadas = (entregadas_reales / total_tareas) * 100
+
     datos_df = pd.DataFrame(
-        [[promedio, asistencia, tareas_faltantes]], 
+        [[promedio, asistencia, porcentaje_entregadas]], 
         columns=['promedio_general', 'porcentaje_asistencia', 'tareas_entregadas'] 
     )
     prediccion = modelo_sara.predict(datos_df)
     
-    # 3. Interpretamos el resultado (1 = Riesgo, 0 = Normal)
     if prediccion[0] == 1:
         nivel_riesgo = "Riesgo Alto"
     else:
         nivel_riesgo = "Normal"
         
-    # 4. Devolvemos la respuesta
+    if promedio < 7.0 or asistencia < 70.0:
+        nivel_riesgo = "Riesgo Alto"
+        
     return jsonify({
         "promedio": promedio,
         "asistencia": asistencia,
