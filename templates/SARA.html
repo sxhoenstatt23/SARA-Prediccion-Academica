@@ -508,61 +508,53 @@
                         <div class="student-stats">
                             <div class="stat-box">
                                 <span class="stat-label">Promedio Actual</span>
-                                <input type="number" id="in-promedio" step="0.1" value="7.2"
+                                <input type="number" id="in-promedio" step="0.1" value="9"
                                     style="width: 100%; border: none; text-align: center; background: transparent; font-size: 18px; font-weight: 700; color: var(--pink-dark); outline: none;">
                             </div>
                             <div class="stat-box">
                                 <span class="stat-label">Asistencia (%)</span>
-                                <input type="number" id="in-asistencia" value="75"
+                                <input type="number" id="in-asistencia" value="20"
                                     style="width: 100%; border: none; text-align: center; background: transparent; font-size: 18px; font-weight: 700; color: var(--warning); outline: none;">
                             </div>
                             <div class="stat-box">
                                 <span class="stat-label">Tareas Faltantes</span>
-                                <input type="number" id="in-tareas" value="4"
+                                <input type="number" id="in-tareas" value="15"
                                     style="width: 100%; border: none; text-align: center; background: transparent; font-size: 18px; font-weight: 700; color: var(--danger); outline: none;">
                             </div>
                         </div>
+
+                        <!-- Botón para llamar a la IA -->
                         <button type="button" id="btn-evaluar-sara" class="btn-save-action"
                             style="margin-top: 20px; background-color: var(--pink-dark);">
                             <i class="fa-solid fa-brain"></i> Evaluar Riesgo con SARA
                         </button>
-                        <div class="stat-box">
-                            <span class="stat-label">Asistencia</span>
-                            <span class="stat-val text-warning">75%</span>
-                        </div>
-                        <div class="stat-box">
-                            <span class="stat-label">Tareas Faltantes</span>
-                            <span class="stat-val highlight-danger">4</span>
+
+                        <div class="action-card">
+                            <h3><i class="fa-solid fa-kit-medical"></i> Protocolo de Intervención</h3>
+
+                            <div class="suggestion-box">
+                                <strong>Sugerencia del Sistema SARA:</strong>
+                                <p>Se recomienda agendar tutoría inmediata en Matemáticas y enviar reporte preventivo a
+                                    coordinación.</p>
+                            </div>
+
+                            <form class="action-form">
+                                <label for="comments">Registrar Notas y Observaciones:</label>
+                                <textarea id="comments" rows="3"
+                                    placeholder="Ej. El alumno menciona problemas de conectividad..."></textarea>
+
+                                <div class="form-checkbox">
+                                    <input type="checkbox" id="applied">
+                                    <label for="applied">¿Se aplicó la intervención recomendada?</label>
+                                </div>
+
+                                <button type="button" class="btn-save-action">Guardar Seguimiento</button>
+                            </form>
                         </div>
                     </div>
-                </div>
+            </section>
 
-                <div class="action-card">
-                    <h3><i class="fa-solid fa-kit-medical"></i> Protocolo de Intervención</h3>
-
-                    <div class="suggestion-box">
-                        <strong>Sugerencia del Sistema SARA:</strong>
-                        <p>Se recomienda agendar tutoría inmediata en Matemáticas y enviar reporte preventivo a
-                            coordinación.</p>
-                    </div>
-
-                    <form class="action-form">
-                        <label for="comments">Registrar Notas y Observaciones:</label>
-                        <textarea id="comments" rows="3"
-                            placeholder="Ej. El alumno menciona problemas de conectividad..."></textarea>
-
-                        <div class="form-checkbox">
-                            <input type="checkbox" id="applied">
-                            <label for="applied">¿Se aplicó la intervención recomendada?</label>
-                        </div>
-
-                        <button type="button" class="btn-save-action">Guardar Seguimiento</button>
-                    </form>
-                </div>
-    </div>
-    </section>
-
-    </main>
+        </main>
     </div>
     <!-- SCRIPT DE CONEXIÓN CON FLASK Y MACHINE LEARNING -->
     <script>
