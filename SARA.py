@@ -3,6 +3,7 @@ import mysql.connector
 from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
 import joblib 
+import pandas as pd
 
 load_dotenv()
 
@@ -33,7 +34,11 @@ def evaluar_alumno():
     tareas_faltantes = int(request.form.get('tareas', 0))
     
     # 2. Le pasamos los datos al modelo para que haga la predicción
-    prediccion = modelo_sara.predict([[promedio, asistencia, tareas_faltantes]])
+    datos_df = pd.DataFrame(
+        [[promedio, asistencia, tareas_faltantes]], 
+        columns=['promedio_general', 'porcentaje_asistencia', 'tareas_entregadas'] 
+    )
+    prediccion = modelo_sara.predict(datos_df)
     
     # 3. Interpretamos el resultado (1 = Riesgo, 0 = Normal)
     if prediccion[0] == 1:
