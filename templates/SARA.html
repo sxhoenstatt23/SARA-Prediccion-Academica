@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SARA - Dashboard Docente</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-primary: #FFF5F7;       /* Fondo rosa claro */
+            --bg-secondary: #FFFFFF;     /* Blanco para tarjetas */
+            --pink-dark: #A24857;        /* Rosa viejo para textos principales */
+            --pink-medium: #D96B80;      /* Rosa intermedio para botones y activos */
+            --pink-light: #FAD1D8;       /* Rosa pastel suave para bordes y hover */
+            --pink-accent: #E85D75;      /* Rosa vibrante para acciones */
+            --text-main: #4A3E41;        /* Gris oscuro cálido */
+            --text-muted: #8F7E81;       /* Gris suave para subtítulos */
+            --danger: #E63946;           /* Alerta riesgo alto */
+            --warning: #F4A261;          /* Advertencia */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+        }
+
+        .dashboard-container {
+            display: block; /* Cambiado para asegurar compatibilidad en renderizado simple */
+            min-height: 100vh;
+        }
+
+        /* Diseño de columnas simulado con tablas/bloques para evitar fallos de renderizado en bloc de notas antiguo */
+        .sidebar {
+            background-color: #FFFFFF;
+            border-bottom: 2px solid var(--pink-light);
+            padding: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .dashboard-container {
+                display: table;
+                width: 100%;
+                table-layout: fixed;
+            }
+            .sidebar {
+                display: table-cell;
+                width: 260px;
+                vertical-align: top;
+                border-right: 2px solid var(--pink-light);
+                border-bottom: none;
+                height: 100vh;
+            }
+            .main-content {
+                display: table-cell;
+                vertical-align: top;
+            }
+        }
+
+        .logo-area {
+            display: block;
+            color: var(--pink-dark);
+            margin-bottom: 30px;
+        }
+
+        .logo-area i {
+            font-size: 24px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .logo-area h2 {
+            display: inline-block;
+            font-size: 22px;
+            font-weight: 700;
+            vertical-align: middle;
+        }
+
+        .nav-menu {
+            margin-bottom: 30px;
+        }
+
+        .nav-menu a {
+            display: block;
+            text-decoration: none;
+            color: var(--text-muted);
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .nav-menu a:hover {
+            background-color: var(--bg-primary);
+            color: var(--pink-medium);
+        }
+
+        .nav-menu a.active {
+            background-color: var(--pink-light);
+            color: var(--pink-dark);
+            font-weight: 600;
+        }
+
+        .user-profile {
+            padding-top: 20px;
+            border-top: 1px solid var(--pink-light);
+        }
+
+        .user-profile i {
+            font-size: 32px;
+            color: var(--pink-medium);
+            float: left;
+            margin-right: 10px;
+        }
+
+        .user-name {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .user-role {
+            display: block;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .top-header {
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .search-bar {
+            float: left;
+            background-color: #FFFFFF;
+            border: 1.5px solid var(--pink-light);
+            border-radius: 12px;
+            padding: 10px 16px;
+            width: 60%;
+            max-width: 400px;
+        }
+
+        .search-bar i {
+            color: var(--pink-medium);
+            margin-right: 8px;
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            width: 85%;
+            font-size: 14px;
+        }
+
+        .sync-btn {
+            float: right;
+            background-color: var(--pink-medium);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .sync-btn:hover {
+            background-color: var(--pink-dark);
+        }
+
+        .metrics-grid {
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .metric-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--pink-light);
+            padding: 24px;
+            border-radius: 16px;
+            width: 31%;
+            float: left;
+            margin-right: 2%;
+            box-shadow: 0 4px 12px rgba(162, 72, 87, 0.04);
+        }
+
+        .metric-card:last-child {
+            margin-right: 0;
+        }
+
+        .metric-info {
+            float: left;
+        }
+
+        .metric-info h3 {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--pink-dark);
+        }
+
+        .metric-card .icon {
+            font-size: 28px;
+            color: var(--pink-medium);
+            float: right;
+            margin-top: 10px;
+        }
+
+        .metric-card.risk {
+            border-left: 5px solid var(--danger);
+        }
+        .metric-card.risk .metric-value, .metric-card.risk i {
+            color: var(--danger);
+        }
+
+        .student-profile-section {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--pink-light);
+            border-radius: 20px;
+            padding: 30px;
+            clear: both;
+            box-shadow: 0 6px 18px rgba(162, 72, 87, 0.05);
+        }
+
+        .section-title {
+            margin-bottom: 24px;
+        }
+
+        .section-title h2 {
+            display: inline-block;
+            color: var(--pink-dark);
+            font-size: 22px;
+            margin-right: 15px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-danger {
+            background-color: #FCE8E6;
+            color: var(--danger);
+        }
+
+        .profile-container {
+            overflow: hidden;
+        }
+
+        .profile-card {
+            width: 48%;
+            float: left;
+            border-right: 1px solid var(--pink-light);
+            padding-right: 4%;
+        }
+
+        .student-header {
+            margin-bottom: 24px;
+        }
+
+        .student-avatar {
+            width: 60px;
+            height: 60px;
+            background-color: var(--pink-light);
+            color: var(--pink-dark);
+            font-weight: 700;
+            font-size: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            text-align: center;
+            line-height: 60px;
+            margin-right: 15px;
+            vertical-align: middle;
+        }
+
+        .student-name-box {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .student-name {
+            font-size: 20px;
+            color: var(--pink-dark);
+        }
+
+        .student-details {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .student-stats {
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background-color: var(--bg-primary);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--pink-light);
+            width: 31%;
+            float: left;
+            margin-right: 3%;
+        }
+
+        .stat-box:last-child {
+            margin-right: 0;
+        }
+
+        .stat-label {
+            display: block;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .stat-val {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--pink-dark);
+        }
+
+        .highlight-danger {
+            color: var(--danger);
+        }
+
+        .text-warning {
+            color: var(--warning);
+        }
+
+        .action-card {
+            width: 48%;
+            float: right;
+        }
+
+        .action-card h3 {
+            color: var(--pink-dark);
+            font-size: 16px;
+            margin-bottom: 16px;
+        }
+
+        .suggestion-box {
+            background-color: #FFF0F2;
+            border-left: 4px solid var(--pink-accent);
+            padding: 16px;
+            border-radius: 0 12px 12px 0;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .suggestion-box strong {
+            color: var(--pink-dark);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .action-form label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .action-form textarea {
+            width: 100%;
+            border: 1.5px solid var(--pink-light);
+            border-radius: 12px;
+            padding: 12px;
+            outline: none;
+            font-size: 14px;
+            resize: none;
+            background-color: #FCF9FA;
+        }
+
+        .form-checkbox {
+            margin: 16px 0;
+            font-size: 13px;
+        }
+
+        .btn-save-action {
+            background-color: var(--pink-accent);
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-save-action:hover {
+            background-color: var(--pink-dark);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <aside class="sidebar">
+            <div class="logo-area">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <h2>SARA</h2>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="#"><i class="fa-solid fa-users"></i> Alumnos</a>
+                <a href="#"><i class="fa-solid fa-rotate"></i> Sincronizar Classroom</a>
+                <a href="#"><i class="fa-solid fa-file-export"></i> Reportes</a>
+            </nav>
+            <div class="user-profile">
+                <i class="fa-solid fa-circle-user"></i>
+                <div>
+                    <span class="user-name">Mtra. Jessica Castillo</span>
+                    <span class="user-role">Docente UPSRJ</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            
+            <header class="top-header">
+                <div class="search-bar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Buscar alumno por nombre o matrícula...">
+                </div>
+                <button class="sync-btn"><i class="fa-solid fa-arrows-rotate"></i> Sincronizar Datos</button>
+            </header>
+
+            <section class="metrics-grid">
+                <div class="metric-card risk">
+                    <div class="metric-info">
+                        <h3>Alumnos en Riesgo</h3>
+                        <p class="metric-value">12</p>
+                    </div>
+                    <i class="fa-solid fa-triangle-exclamation icon"></i>
+                </div>
+                <div class="metric-card average">
+                    <div class="metric-info">
+                        <h3>Promedio General</h3>
+                        <p class="metric-value">8.5</p>
+                    </div>
+                    <i class="fa-solid fa-graduation-cap icon"></i>
+                </div>
+                <div class="metric-card attendance">
+                    <div class="metric-info">
+                        <h3>Asistencia Promedio</h3>
+                        <p class="metric-value">90%</p>
+                    </div>
+                    <i class="fa-solid fa-user-check icon"></i>
+                </div>
+            </section>
+
+            <section class="student-profile-section">
+                <div class="section-title">
+                    <h2>Expediente de Alumno</h2>
+                    <span class="badge badge-danger">Riesgo Alto</span>
+                </div>
+
+                <div class="profile-container">
+                    <div class="profile-card">
+                        <div class="student-header">
+                            <div class="student-avatar">JP</div>
+                            <div class="student-name-box">
+                                <h2 class="student-name">Juan Pérez</h2>
+                                <p class="student-details">Carrera: Ingeniería en Software | Matrícula: 202604812</p>
+                            </div>
+                        </div>
+
+                        <div class="student-stats">
+                            <div class="stat-box">
+                                <span class="stat-label">Promedio Actual</span>
+                                <span class="stat-val highlight-danger">7.2</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Asistencia</span>
+                                <span class="stat-val text-warning">75%</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="stat-label">Tareas Faltantes</span>
+                                <span class="stat-val highlight-danger">4</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-card">
+                        <h3><i class="fa-solid fa-kit-medical"></i> Protocolo de Intervención</h3>
+                        
+                        <div class="suggestion-box">
+                            <strong>Sugerencia del Sistema SARA:</strong>
+                            <p>Se recomienda agendar tutoría inmediata en Matemáticas y enviar reporte preventivo a coordinación.</p>
+                        </div>
+
+                        <form class="action-form">
+                            <label for="comments">Registrar Notas y Observaciones:</label>
+                            <textarea id="comments" rows="3" placeholder="Ej. El alumno menciona problemas de conectividad..."></textarea>
+                            
+                            <div class="form-checkbox">
+                                <input type="checkbox" id="applied">
+                                <label for="applied">¿Se aplicó la intervención recomendada?</label>
+                            </div>
+
+                            <button type="button" class="btn-save-action">Guardar Seguimiento</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+</body>
+</html>
